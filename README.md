@@ -69,21 +69,15 @@ http://127.0.0.1:3000/data_bounty_platform
     - Hanerger base contract ： https://github.com/wildcards-world/harberger-base-contracts  
     - harberger-ui：https://github.com/wildcards-world/harberger-ui  
 
-<br>
-
   - [Tutorial]
     - Tutorial①：https://dev.to/wildcards/build-your-first-harberger-tax-app-part-1-3gdd
     - Tutorial②：
-
-<br>
 
   - [Article]
     - Patronage As An Asset Class  
       https://blog.simondlr.com/posts/patronage-as-an-asset-class
     - What is Harberger-Tax ?  
       https://medium.com/@simondlr/what-is-harberger-tax-where-does-the-blockchain-fit-in-1329046922c6
-
-<br>
 
   - [VIdeo]
     - [VIDEO] South Africa’s WildCards Project Becomes the First Scalable "Harberger Tax Contract" Live Deployment on Ethereum  

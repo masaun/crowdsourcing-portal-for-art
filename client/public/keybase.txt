@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/jonjonclark
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://jonjonclark.com
+  * I am jonjonclark (https://keybase.io/jonjonclark) on keybase.
+  * I have a public key ASCPYeAcJlHjeRU2BTHiCKR8pmxAiNVtf9bw55ZK0OTUmQo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120bb5a8567cf9574ac9f7f8eafb6712d338c15a67ed2eda8a42e3f6238fc6fc83f0a",
+      "host": "keybase.io",
+      "kid": "01208f61e01c2651e37915360531e208a47ca66c4088d56d7fd6f0e7964ad0e4d4990a",
+      "uid": "b17e88a1b6d6d2c94e0fc5fe10196819",
+      "username": "jonjonclark"
+    },
+    "merkle_root": {
+      "ctime": 1568642578,
+      "hash": "05a477d0a45959ca4b402a13b5a86e5c2f155aa214bb461e32020c01bc2246a479dd9cbb0017cb617796f4cf640bcb306f47cde46561d2d353bf1819674ec67f",
+      "hash_meta": "211e7f7502e7250462871897f146b784e8ecc8b8ab6e8d49622fc0450d295680",
+      "seqno": 7466525
+    },
+    "service": {
+      "entropy": "9io/9npj4nNWSwvGzLYjqK5i",
+      "hostname": "jonjonclark.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "4.4.2"
+  },
+  "ctime": 1568642585,
+  "expire_in": 504576000,
+  "prev": "c0d7a3ac5fb62b92aa8ea173555d293ef680112a01eac5964fcaec6565d09ff6",
+  "seqno": 19,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgj2HgHCZR43kVNgUx4gikfKZsQIjVbX/W8OeWStDk1JkKp3BheWxvYWTESpcCE8QgwNejrF+2K5KqjqFzVV0pPvaAESoB6sWWT8rsZWXQn/bEIJ7XJbuKT3/n03EBQy0m9klHl7RiOGE0UwSCo3sCZCP4AgHCo3NpZ8RA4xabe2B86GqEtrZ8HT4OUEWEPcRORnku+10Tuyd1podjRydVBLf/xLNJVo6hQSaImjntrTLHPPhCQoeM1LQNAqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIOOkWB42rwVkM1gqBfpz63rL7Xo1RJYwa3SIMhLaJJwgo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/jonjonclark
+
+==================================================================

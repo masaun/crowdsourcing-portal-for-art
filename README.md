@@ -1,7 +1,7 @@
-# Climate Change with Harberger
+# Crowdsourcing Portal For Art
 
 ***
-## 【Introduction of Climate Change with Harberger】
+## 【Introduction of Crowdsourcing Portal For Art】
 - This is a dApp that ...
 
 &nbsp;
@@ -65,6 +65,11 @@ http://127.0.0.1:3000/data_bounty_platform
 
 ## 【References】
 - [WildCard]：  
+  - [Wildcards Loyalty Token (WLT) ]  
+    The latest version of WildCard system gives holders 1 Wildcards Loyalty Token (WLT) per day.  
+    https://etherscan.io/token/0x773c75c2277ed3e402bdefd28ec3b51a3afbd8a4
+
+
   - [Repos]  
     - Hanerger base contract ： https://github.com/wildcards-world/harberger-base-contracts  
     - harberger-ui：https://github.com/wildcards-world/harberger-ui  

@@ -5,6 +5,7 @@ import User from "./components/users/User";
 import Alert from "./components/layout/Alert";
 import ParticleComponent from "./components/layout/ParticleComponent";
 import Home from "./components/pages/Home";
+import Deposit from "./components/pages/Deposit";
 import About from "./components/pages/About";
 import Contact from "./components/pages/Contact";
 import NotFound from "./components/pages/NotFound";
@@ -47,6 +48,7 @@ const App = () => {
                     <Alert />
                     <Switch>
                       <Route exact path="/" component={Home} />
+                      <Route exact path="/deposit" component={Deposit} />
                       <Route exact path="/about" component={About} />
                       <Route exact path="/contact" component={Contact} />
                       <Route exact path="/user/moose-code" component={User} />

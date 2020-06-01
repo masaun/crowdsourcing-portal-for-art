@@ -14,6 +14,9 @@ const Navbar = ({ icon, title }) => {
           <Link to="/">Bounties</Link>
         </li>
         <li>
+          <Link to="/deposit">Deposit</Link>
+        </li>
+        <li>
           <Link to="/about">About</Link>
         </li>
         <li>

@@ -8,7 +8,8 @@ contract McEvents {
     event JoinPool(
         address indexed userWhoDeposited, 
         address depositedToken, 
-        uint256 depositedAmount
+        uint256 depositedAmount,
+        uint256 totalDepositedDai
     );
 
 

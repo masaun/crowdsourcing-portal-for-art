@@ -33,9 +33,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
 
     constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider) public {
         dai = IERC20(daiAddress);
-        lendingPool = LendingPool(_lendingPool);
-        lendingPoolCore = LendingPoolCore(_lendingPoolCore);
-        lendingPoolAddressesProvider = LendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        lendingPool = ILendingPool(_lendingPool);
+        lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
+        lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
     }
 
     /***

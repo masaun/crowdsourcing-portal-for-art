@@ -26,6 +26,8 @@ import "./aave/contracts/interfaces/ILendingPoolAddressesProvider.sol";
 contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstants {
     using SafeMath for uint;
 
+    uint totalDepositedDai;
+
     IERC20 public dai;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
@@ -50,6 +52,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
 
         /// Deposit DAI
         lendingPool.deposit(_reserve, _amount, _referralCode);
+
+        /// Save deposited amount each user
+        depositedDai[msg.sender] = _amount;
     }
     
 

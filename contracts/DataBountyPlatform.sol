@@ -12,9 +12,12 @@ import "./storage/McStorage.sol";
 import "./storage/McConstants.sol";
 
 // idle.finance v3
+//import "./idle-contracts-v3/contracts/interfaces/IIdleTokenV3.sol";
 
-import "./idle-contracts-v3/contracts/interfaces/IIdleTokenV3.sol";
-
+// AAVE
+import "./aave/contracts/interfaces/ILendingPool.sol";
+import "./aave/contracts/interfaces/ILendingPoolCore.sol";
+import "./aave/contracts/interfaces/ILendingPoolAddressesProvider.sol";
 
 
 /***
@@ -24,11 +27,15 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     using SafeMath for uint;
 
     IERC20 public dai;
-    IIdleTokenV3 public idleTokenV3;
+    ILendingPool public lendingPool;
+    ILendingPoolCore public lendingPoolCore;
+    ILendingPoolAddressesProvider public lendingPoolAddressesProvider;
 
-    constructor(address daiAddress) public {
+    constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider) public {
         dai = IERC20(daiAddress);
-        
+        lendingPool = LendingPool(_lendingPool);
+        lendingPoolCore = LendingPoolCore(_lendingPoolCore);
+        lendingPoolAddressesProvider = LendingPoolAddressesProvider(_lendingPoolAddressesProvider);
     }
 
     /***

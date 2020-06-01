@@ -23,6 +23,9 @@ module.exports = {
             "LendingPool": "0xA03105cc79128D7d67f36401c8518695C08C7d0C",                   /// AAVE - Uniswap Market
             "LendingPoolCore": "0x07Cdaf84340410ca8dB93bDDf77783C61032B75d",               /// AAVE - Uniswap Market
             "LendingPoolAddressesProvider": "0xA037D6a4E81dD149bd72cc0B28626E965608522D",  /// AAVE - Uniswap Market
-        }        
+        },
+        "BokkyPooBahsDateTimeLibrary": {
+            "BokkyPooBahsDateTimeContract": "0x947cc35992e6723de50bf704828a01fd2d5d6641"
+        },
     }    
 }

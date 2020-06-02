@@ -78,6 +78,28 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     }
     
     
+    /***
+     * @notice - Vote for a favorite artwork of voter (voter is only user who deposited before)
+     **/
+    function voteForArtWork(uint256 artWorkIdToVoteFor) public {
+        // Can only vote if they joined a previous iteration round...
+        // Check if the msg.sender has given approval rights to our steward to vote on their behalf
+        uint currentArtWork = usersNominatedProject[artWorkIteration][msg.sender];
+        if (currentArtWork != 0) {
+            artWorkVotes[artWorkIteration][currentArtWork] = artWorkVotes[artWorkIteration][currentArtWork].sub(depositedDai[msg.sender]);
+        }
+
+        artWorkVotes[artWorkIteration][artWorkIdToVoteFor] = artWorkVotes[artWorkIteration][artWorkIdToVoteFor].add(depositedDai[msg.sender]);
+
+        usersNominatedProject[artWorkIteration][msg.sender] = artWorkIdToVoteFor;
+
+        uint topProjectVotes = artWorkVotes[artWorkIteration][topProject[artWorkIteration]];
+
+        // TODO:: if they are equal there is a problem (we must handle this!!)
+        if (artWorkVotes[artWorkIteration][artWorkId] > topProjectVotes) {
+            topProject[artWorkIteration] = artWorkId;
+        }
+    }
 
 
     /***

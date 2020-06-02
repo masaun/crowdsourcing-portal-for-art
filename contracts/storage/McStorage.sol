@@ -11,14 +11,16 @@ contract McStorage is McObjects, McEvents {
     ///////////////////////////////////
     // @dev - Define as memory
     ///////////////////////////////////
-    address[] exampleGroups;
+    uint256 artWorkId;
 
     
     //////////////////////////////////
     // @dev - Define as storage
     ///////////////////////////////////
-    ExampleObject[] public exampleObjects;
+    mapping (address => uint) depositedDai;
 
-    mapping (uint256 => Sample) samples;
+    mapping(uint256 => address) public artWorkOwner;
+    mapping(uint256 => string) public artWorkDetails;
+    mapping(uint256 => ArtWorkState) public artWorkState; // Artwork Id to current state
 
 }

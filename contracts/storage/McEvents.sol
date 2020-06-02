@@ -5,38 +5,20 @@ import "./McObjects.sol";
 
 contract McEvents {
 
-    event _PairCreated(
-        address indexed token0, 
-        address indexed token1, 
-        address pair
+    event JoinPool(
+        address indexed userWhoDeposited, 
+        address depositedToken, 
+        uint depositedAmount,
+        uint totalDepositedDai
     );
 
-    event MintUniToken(
-        address pair,
-        address to, 
-        uint liquidity
+    event CreateArtWork(
+        uint indexed newArtWorkId, 
+        address artWorkOwner,
+        McObjects.ArtWorkState artWorkState,
+        string artWorkHash
     );
-
-    event _AddLiquidity(
-        address tokenA,
-        address tokenB,
-        uint amountA, 
-        uint amountB,
-        uint liquidity
-    );
-
-    event SyndicatedAddLiquidity(
-        address userA,
-        address userB,
-        address tokenA,
-        address tokenB,
-        uint amountA, 
-        uint amountB,
-        uint liquidity
-    );
-
-
-
+    
 
 
     /***

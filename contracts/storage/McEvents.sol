@@ -8,9 +8,17 @@ contract McEvents {
     event JoinPool(
         address indexed userWhoDeposited, 
         address depositedToken, 
-        uint256 depositedAmount,
-        uint256 totalDepositedDai
+        uint depositedAmount,
+        uint totalDepositedDai
     );
+
+    event CreateArtWork(
+        uint indexed newArtWorkId, 
+        address artWorkOwner,
+        McObjects.ArtWorkState artWorkState,
+        string artWorkHash
+    );
+    
 
 
     /***

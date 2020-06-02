@@ -58,6 +58,25 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
         totalDepositedDai.add(_amount);
         emit JoinPool(msg.sender, _reserve, _amount, totalDepositedDai);
     }
+
+    /***
+     * @notice - Create artwork and list them.
+     * @return - New artwork id
+     **/
+    function createArtWork(string memory artWorkHash) public returns (uint newArtWorkId) {
+        // The first artwork will have an ID of 1
+        newArtWorkId = artWorkId.add(1);
+
+        artWorkOwner[newArtWorkId] = msg.sender;
+        artWorkState[newArtWorkId] = ArtWorkState.Active;
+        artWorkDetails[newArtWorkId] = artWorkHash;
+
+        emit CreateArtWork(newArtWorkId, 
+                           artWorkOwner[newArtWorkId], 
+                           artWorkState[newArtWorkId], 
+                           artWorkDetails[newArtWorkId]);
+    }
+    
     
 
 

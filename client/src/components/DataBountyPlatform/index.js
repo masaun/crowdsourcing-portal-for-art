@@ -29,6 +29,7 @@ export default class DataBountyPlatform extends Component {
 
         /////// AAVE related functions
         this.joinPool = this.joinPool.bind(this);
+        this.createArtWork = this.createArtWork.bind(this);
 
         /////// Getter Functions of others
         this._balanceOfContract = this._balanceOfContract.bind(this);
@@ -51,6 +52,20 @@ export default class DataBountyPlatform extends Component {
         let res2 = await data_bounty_platform.methods.joinPool(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== joinPool() ===\n', res2);                
     }
+
+    /***
+     * @notice - Create artwork and list them.
+     **/
+    createArtWork = async () => {
+        const { accounts, web3, dai, data_bounty_platform } = this.state;
+
+        const artworkName = "Artwork of the tiger";
+        const _artWorkHash = web3.utils.toHex(artworkName);
+
+        let res = await data_bounty_platform.methods.createArtWork(_artWorkHash).send({ from: accounts[0] });
+        console.log('=== createArtWork() ===\n', res);           
+    }
+
 
 
     /***
@@ -224,6 +239,8 @@ export default class DataBountyPlatform extends Component {
                         >
                             <h4>Data Bounty Platform</h4> <br />
                             <Button size={'small'} mt={3} mb={2} onClick={this.joinPool}> Join Pool </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.createArtWork}> Create ArtWork </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>

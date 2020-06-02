@@ -26,8 +26,6 @@ import "./aave/contracts/interfaces/ILendingPoolAddressesProvider.sol";
 contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstants {
     using SafeMath for uint;
 
-    uint totalDepositedDai;
-
     IERC20 public dai;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
@@ -99,6 +97,25 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
         if (artWorkVotes[artWorkIteration][artWorkId] > topProjectVotes) {
             topProject[artWorkIteration] = artWorkId;
         }
+    }
+
+    /***
+     * @notice - Distribute fund into selected ArtWork by voting)
+     **/
+    function distributeFunds() public {
+        // On a *whatever we decide basis* the funds are distributed to the winning project
+        // E.g. every 2 weeks, the project with the most votes gets the generated interest.
+
+        require(artWorkDeadline > now, "current vote still active");
+
+        if (topProject[artWorkIteration] != 0) {
+            // TODO: do the payout!
+        }
+
+        artWorkDeadline = artWorkDeadline.add(votingInterval);
+
+        artWorkIteration = artWorkIteration.add(1);
+        topProject[artWorkIteration] = 0;
     }
 
 

@@ -11,8 +11,13 @@ contract McStorage is McObjects, McEvents {
     ///////////////////////////////////
     // @dev - Define as memory
     ///////////////////////////////////
+    uint totalDepositedDai;
+
     uint artWorkId;
     uint artWorkIteration;
+
+    uint votingInterval;
+    uint artWorkDeadline;
     
 
     //////////////////////////////////

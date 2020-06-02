@@ -30,6 +30,8 @@ export default class DataBountyPlatform extends Component {
         /////// AAVE related functions
         this.joinPool = this.joinPool.bind(this);
         this.createArtWork = this.createArtWork.bind(this);
+        this.voteForArtWork = this.voteForArtWork.bind(this);
+        this.distributeFunds = this.distributeFunds.bind(this);
 
         /////// Getter Functions of others
         this._balanceOfContract = this._balanceOfContract.bind(this);
@@ -66,6 +68,28 @@ export default class DataBountyPlatform extends Component {
         console.log('=== createArtWork() ===\n', res);           
     }
 
+    /***
+     * @notice - Vote for a favorite ArtWork of voter (voter is only user who deposited before)
+     **/
+    voteForArtWork = async () => {
+        const { accounts, web3, dai, data_bounty_platform } = this.state;
+
+        const _artWorkIdToVoteFor = 1;
+
+        let res = await data_bounty_platform.methods.voteForArtWork(_artWorkIdToVoteFor).send({ from: accounts[0] });
+        console.log('=== voteForArtWork() ===\n', res);           
+    }
+
+
+    /***
+     * @notice - Distribute fund into selected CompanyProfile by voting)
+     **/
+    distributeFunds = async () => {
+        const { accounts, web3, dai, data_bounty_platform } = this.state;
+
+        let res = await data_bounty_platform.methods.distributeFunds().send({ from: accounts[0] });
+        console.log('=== distributeFunds() ===\n', res);        
+    }
 
 
     /***
@@ -241,6 +265,10 @@ export default class DataBountyPlatform extends Component {
                             <Button size={'small'} mt={3} mb={2} onClick={this.joinPool}> Join Pool </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createArtWork}> Create ArtWork </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.voteForArtWork}> Vote For Company Profile </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.distributeFunds}> Distribute Funds </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>

@@ -26,6 +26,6 @@ module.exports = {
         },
         "BokkyPooBahsDateTimeLibrary": {
             "BokkyPooBahsDateTimeContract": "0x947cc35992e6723de50bf704828a01fd2d5d6641"
-        },
-    }    
+        },        
+    }     
 }

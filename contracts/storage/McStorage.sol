@@ -11,9 +11,15 @@ contract McStorage is McObjects, McEvents {
     ///////////////////////////////////
     // @dev - Define as memory
     ///////////////////////////////////
-    uint256 artWorkId;
+    uint totalDepositedDai;
 
+    uint artWorkId;
+    uint artWorkIteration;
+
+    uint votingInterval;
+    uint artWorkDeadline;
     
+
     //////////////////////////////////
     // @dev - Define as storage
     ///////////////////////////////////
@@ -23,4 +29,7 @@ contract McStorage is McObjects, McEvents {
     mapping(uint256 => string) public artWorkDetails;
     mapping(uint256 => ArtWorkState) public artWorkState; // Artwork Id to current state
 
+    mapping(uint256 => mapping(address => uint256)) public usersNominatedProject; // Means user can only have one project.
+    mapping(uint256 => mapping(uint256 => uint256)) public artWorkVotes;
+    mapping(uint256 => uint256) public topProject;
 }

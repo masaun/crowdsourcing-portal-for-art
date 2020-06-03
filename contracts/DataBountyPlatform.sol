@@ -72,7 +72,8 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
      **/
     function createArtWork(string memory artWorkHash) public returns (uint newArtWorkId) {
         // The first artwork will have an ID of 1
-        uint newArtWorkId = artWorkId.add(1);
+        uint newArtWorkId = artWorkId++;
+        //uint newArtWorkId = artWorkId.add(1);
 
         artWorkOwner[newArtWorkId] = msg.sender;
         artWorkState[newArtWorkId] = ArtWorkState.Active;

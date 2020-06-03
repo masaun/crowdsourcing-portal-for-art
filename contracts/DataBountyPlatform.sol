@@ -18,6 +18,7 @@ import "./storage/McConstants.sol";
 import "./aave/contracts/interfaces/ILendingPool.sol";
 import "./aave/contracts/interfaces/ILendingPoolCore.sol";
 import "./aave/contracts/interfaces/ILendingPoolAddressesProvider.sol";
+import "./aave/contracts/interfaces/IAToken.sol";
 
 
 /***
@@ -30,8 +31,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
     ILendingPoolAddressesProvider public lendingPoolAddressesProvider;
+    IAToken public aDai;
 
-    constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider) public {
+    constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider, address _aDai) public {
         admin = address(this);  /// Temporary
         //admin = msg.sender;
 
@@ -39,6 +41,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         lendingPool = ILendingPool(_lendingPool);
         lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
         lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        aDai = IAToken(_aDai);
 
         /// every 1 weeks, voting deadline is updated
         votingInterval = 10;         /// For testing (Every 10 second, voting deadline is updated)
@@ -122,11 +125,23 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         }
 
+        /// Redeem
+        address _user = address(this);
+        uint redeemedAmount;
+        uint redeemAmount = aDai.balanceOf(_user);
+        redeemedAmount = aDai.redeem(redeemAmount);
+
+        /// Calculate current interest income
+        uint principalBalance = aDai.principalBalanceOf(_user);
+        uint currentInterestIncome = redeemedAmount - principalBalance;
+
         /// Set next voting deadline
         artWorkDeadline = artWorkDeadline.add(votingInterval);
 
         artWorkIteration = artWorkIteration.add(1);
         topProject[artWorkIteration] = 0;
+
+        emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
     }
 
 

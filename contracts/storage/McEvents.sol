@@ -18,6 +18,13 @@ contract McEvents {
         McObjects.ArtWorkState artWorkState,
         string artWorkHash
     );
+
+    event DistributeFunds(
+        uint redeemedAmount, 
+        uint principalBalance, 
+        uint currentInterestIncome
+    );
+    
     
 
 

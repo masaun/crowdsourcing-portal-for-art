@@ -127,12 +127,12 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         /// Redeem
         address _user = address(this);
-        uint redeemedAmount;
         uint redeemAmount = aDai.balanceOf(_user);
-        redeemedAmount = aDai.redeem(redeemAmount);
+        uint principalBalance = aDai.principalBalanceOf(_user);
+        aDai.redeem(redeemAmount);
 
         /// Calculate current interest income
-        uint principalBalance = aDai.principalBalanceOf(_user);
+        uint redeemedAmount = dai.balanceOf(_user);
         uint currentInterestIncome = redeemedAmount - principalBalance;
 
         /// Set next voting deadline

@@ -115,7 +115,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
      **/
-    function distributeFunds() public onlyAdmin(admin) {
+    function distributeFunds(address _reserve, uint16 _referralCode) public onlyAdmin(admin) {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
         require(artWorkDeadline < now, "current vote still active");
@@ -134,6 +134,10 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Calculate current interest income
         uint redeemedAmount = dai.balanceOf(_user);
         uint currentInterestIncome = redeemedAmount - principalBalance;
+
+        /// Re-lending principal balance into AAVE
+        dai.approve(lendingPoolAddressesProvider.getLendingPoolCore(), principalBalance);
+        lendingPool.deposit(_reserve, principalBalance, _referralCode);        
 
         /// Set next voting deadline
         artWorkDeadline = artWorkDeadline.add(votingInterval);

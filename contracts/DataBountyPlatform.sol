@@ -38,6 +38,10 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         lendingPool = ILendingPool(_lendingPool);
         lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
         lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+
+        /// every 1 weeks, voting deadline is updated
+        votingInterval = 1 weeks;
+        artWorkDeadline = now.add(votingInterval);
     }
 
 

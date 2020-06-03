@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./lib/OwnableOriginal.sol";
 
 // Storage
-import "./storage/McStorage.sol";
+import "./storage/McModifier.sol";  /// McStorage.sol is inherited
 import "./storage/McConstants.sol";
 
 // idle.finance v3
@@ -23,7 +23,7 @@ import "./aave/contracts/interfaces/ILendingPoolAddressesProvider.sol";
 /***
  * @notice - This contract is that ...
  **/
-contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstants {
+contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConstants {
     using SafeMath for uint;
 
     IERC20 public dai;
@@ -32,11 +32,14 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     ILendingPoolAddressesProvider public lendingPoolAddressesProvider;
 
     constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider) public {
+        admin = msg.sender;
+
         dai = IERC20(daiAddress);
         lendingPool = ILendingPool(_lendingPool);
         lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
         lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
     }
+
 
     /***
      * @notice - Join Pool (Deposit DAI into idle-contracts-v3) for getting right of voting
@@ -77,7 +80,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     
     
     /***
-     * @notice - Vote for a favorite artwork of voter (voter is only user who deposited before)
+     * @notice - Vote for selecting the best artwork (voter is only user who deposited before)
      **/
     function voteForArtWork(uint256 artWorkIdToVoteFor) public {
         // Can only vote if they joined a previous iteration round...
@@ -105,7 +108,6 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     function distributeFunds() public {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
-
         require(artWorkDeadline > now, "current vote still active");
 
         if (topProject[artWorkIteration] != 0) {

@@ -135,6 +135,14 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint redeemedAmount = dai.balanceOf(_user);
         uint currentInterestIncome = redeemedAmount - principalBalance;
 
+        /// Select winning address
+        address winningAddress;
+        winningAddress = 0x8Fc9d07b1B9542A71C4ba1702Cd230E160af6EB3;  /// Wallet address for testing
+
+        /// Transfer redeemed Interest income into winning address
+        dai.approve(winningAddress, currentInterestIncome);
+        dai.transfer(winningAddress, currentInterestIncome);
+
         /// Re-lending principal balance into AAVE
         dai.approve(lendingPoolAddressesProvider.getLendingPoolCore(), principalBalance);
         lendingPool.deposit(_reserve, principalBalance, _referralCode);        

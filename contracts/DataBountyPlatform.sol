@@ -160,6 +160,8 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         address _user = address(this);
         uint redeemAmount = aDai.balanceOf(_user);
         uint principalBalance = aDai.principalBalanceOf(_user);
+
+        return (redeemAmount, principalBalance);
     }
 
 }

@@ -110,7 +110,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
      **/
-    function distributeFunds() public {
+    function distributeFunds() public onlyAdmin {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
         require(artWorkDeadline > now, "current vote still active");
@@ -119,6 +119,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
             // TODO: do the payout!
         }
 
+        /// Set next voting deadline
         artWorkDeadline = artWorkDeadline.add(votingInterval);
 
         artWorkIteration = artWorkIteration.add(1);

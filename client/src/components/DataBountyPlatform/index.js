@@ -266,7 +266,7 @@ export default class DataBountyPlatform extends Component {
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createArtWork}> Create ArtWork </Button> <br />
 
-                            <Button size={'small'} mt={3} mb={2} onClick={this.voteForArtWork}> Vote For Company Profile </Button> <br />
+                            <Button size={'small'} mt={3} mb={2} onClick={this.voteForArtWork}> Vote For ArtWork </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.distributeFunds}> Distribute Funds </Button> <br />
 

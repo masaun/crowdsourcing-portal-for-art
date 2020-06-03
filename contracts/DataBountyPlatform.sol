@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./lib/OwnableOriginal.sol";
 
 // Storage
-import "./storage/McStorage.sol";
+import "./storage/McModifier.sol";  /// McStorage.sol is inherited
 import "./storage/McConstants.sol";
 
 // idle.finance v3
@@ -18,25 +18,37 @@ import "./storage/McConstants.sol";
 import "./aave/contracts/interfaces/ILendingPool.sol";
 import "./aave/contracts/interfaces/ILendingPoolCore.sol";
 import "./aave/contracts/interfaces/ILendingPoolAddressesProvider.sol";
+import "./aave/contracts/interfaces/IAToken.sol";
 
 
 /***
  * @notice - This contract is that ...
  **/
-contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstants {
+contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConstants {
     using SafeMath for uint;
 
     IERC20 public dai;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
     ILendingPoolAddressesProvider public lendingPoolAddressesProvider;
+    IAToken public aDai;
 
-    constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider) public {
+    constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider, address _aDai) public {
+        admin = address(this);  /// Temporary
+        //admin = msg.sender;
+
         dai = IERC20(daiAddress);
         lendingPool = ILendingPool(_lendingPool);
         lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
         lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        aDai = IAToken(_aDai);
+
+        /// every 1 weeks, voting deadline is updated
+        votingInterval = 10;         /// For testing (Every 10 second, voting deadline is updated)
+        //votingInterval = 1 weeks;  /// For actual 
+        artWorkDeadline = now.add(votingInterval);
     }
+
 
     /***
      * @notice - Join Pool (Deposit DAI into idle-contracts-v3) for getting right of voting
@@ -63,7 +75,8 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
      **/
     function createArtWork(string memory artWorkHash) public returns (uint newArtWorkId) {
         // The first artwork will have an ID of 1
-        newArtWorkId = artWorkId.add(1);
+        uint newArtWorkId = artWorkId++;
+        //uint newArtWorkId = artWorkId.add(1);
 
         artWorkOwner[newArtWorkId] = msg.sender;
         artWorkState[newArtWorkId] = ArtWorkState.Active;
@@ -77,7 +90,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     
     
     /***
-     * @notice - Vote for a favorite artwork of voter (voter is only user who deposited before)
+     * @notice - Vote for selecting the best artwork (voter is only user who deposited before)
      **/
     function voteForArtWork(uint256 artWorkIdToVoteFor) public {
         // Can only vote if they joined a previous iteration round...
@@ -102,20 +115,33 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
      **/
-    function distributeFunds() public {
+    function distributeFunds() public onlyAdmin(admin) {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
-
-        require(artWorkDeadline > now, "current vote still active");
+        require(artWorkDeadline < now, "current vote still active");
 
         if (topProject[artWorkIteration] != 0) {
             // TODO: do the payout!
+
         }
 
+        /// Redeem
+        address _user = address(this);
+        uint redeemAmount = aDai.balanceOf(_user);
+        uint principalBalance = aDai.principalBalanceOf(_user);
+        aDai.redeem(redeemAmount);
+
+        /// Calculate current interest income
+        uint redeemedAmount = dai.balanceOf(_user);
+        uint currentInterestIncome = redeemedAmount - principalBalance;
+
+        /// Set next voting deadline
         artWorkDeadline = artWorkDeadline.add(votingInterval);
 
         artWorkIteration = artWorkIteration.add(1);
         topProject[artWorkIteration] = 0;
+
+        emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
     }
 
 
@@ -124,6 +150,18 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McStorage, McConstan
      **/
     function balanceOfContract() public view returns (uint balanceOfContract_DAI, uint balanceOfContract_ETH) {
         return (dai.balanceOf(address(this)), address(this).balance);
+    }
+
+    /***
+     * @notice - Test Functions
+     **/    
+    function getAaveRelatedFunction() public view returns (uint redeemAmount, uint principalBalance) {
+        /// Redeem
+        address _user = address(this);
+        uint redeemAmount = aDai.balanceOf(_user);
+        uint principalBalance = aDai.principalBalanceOf(_user);
+
+        return (redeemAmount, principalBalance);
     }
 
 }

@@ -32,7 +32,8 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     ILendingPoolAddressesProvider public lendingPoolAddressesProvider;
 
     constructor(address daiAddress, address _lendingPool, address _lendingPoolCore, address _lendingPoolAddressesProvider) public {
-        admin = msg.sender;
+        admin = address(this);  /// Temporary
+        //admin = msg.sender;
 
         dai = IERC20(daiAddress);
         lendingPool = ILendingPool(_lendingPool);

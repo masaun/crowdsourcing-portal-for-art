@@ -6,8 +6,9 @@ import "./McStorage.sol";
 
 contract McModifier is McStorage {
 
-    modifier onlyAdmin() {
-        require(msg.sender == admin, "Not admin");
+    modifier onlyAdmin(address setAdminAddress) {
+        require(setAdminAddress == admin, "Not admin");
+        //require(msg.sender == admin, "Not admin");
         _;
     }
 

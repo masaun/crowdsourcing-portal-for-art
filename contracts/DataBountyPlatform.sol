@@ -111,7 +111,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
      **/
-    function distributeFunds() public onlyAdmin(address(this)) {
+    function distributeFunds() public onlyAdmin(admin) {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
         require(artWorkDeadline > now, "current vote still active");

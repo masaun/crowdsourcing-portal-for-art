@@ -75,8 +75,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
      **/
     function createArtWork(string memory artWorkHash) public returns (uint newArtWorkId) {
         // The first artwork will have an ID of 1
-        uint newArtWorkId = artWorkId++;
-        //uint newArtWorkId = artWorkId.add(1);
+        uint newArtWorkId = artWorkId.add(1);
 
         artWorkOwner[newArtWorkId] = msg.sender;
         artWorkState[newArtWorkId] = ArtWorkState.Active;
@@ -93,22 +92,25 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
      * @notice - Vote for selecting the best artwork (voter is only user who deposited before)
      **/
     function voteForArtWork(uint256 artWorkIdToVoteFor) public {
-        // Can only vote if they joined a previous iteration round...
-        // Check if the msg.sender has given approval rights to our steward to vote on their behalf
-        uint currentArtWork = usersNominatedProject[artWorkIteration][msg.sender];
+        /// Can only vote if they joined a previous iteration round...
+        /// Check if the msg.sender has given approval rights to our steward to vote on their behalf
+        uint currentArtWork = usersNominatedProject[artWorkVotingRound][msg.sender];
         if (currentArtWork != 0) {
-            artWorkVotes[artWorkIteration][currentArtWork] = artWorkVotes[artWorkIteration][currentArtWork].sub(depositedDai[msg.sender]);
+            artWorkVotes[artWorkVotingRound][currentArtWork] = artWorkVotes[artWorkVotingRound][currentArtWork].sub(depositedDai[msg.sender]);
         }
 
-        artWorkVotes[artWorkIteration][artWorkIdToVoteFor] = artWorkVotes[artWorkIteration][artWorkIdToVoteFor].add(depositedDai[msg.sender]);
+        /// "artWorkVotingRound" is what number of voting round are.
+        /// Save what voting round is and who user voted for 
+        artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor] = artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor].add(depositedDai[msg.sender]);
 
-        usersNominatedProject[artWorkIteration][msg.sender] = artWorkIdToVoteFor;
+        /// Save who user voted for  
+        usersNominatedProject[artWorkVotingRound][msg.sender] = artWorkIdToVoteFor;
 
-        uint topProjectVotes = artWorkVotes[artWorkIteration][topProject[artWorkIteration]];
+        uint topProjectVotes = artWorkVotes[artWorkVotingRound][topProject[artWorkVotingRound]];
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
-        if (artWorkVotes[artWorkIteration][artWorkId] > topProjectVotes) {
-            topProject[artWorkIteration] = artWorkId;
+        if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
+            topProject[artWorkVotingRound] = artWorkId;
         }
     }
 
@@ -120,7 +122,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
         require(artWorkDeadline < now, "current vote still active");
 
-        if (topProject[artWorkIteration] != 0) {
+        if (topProject[artWorkVotingRound] != 0) {
             // TODO: do the payout!
 
         }
@@ -134,6 +136,11 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Calculate current interest income
         uint redeemedAmount = dai.balanceOf(_user);
         uint currentInterestIncome = redeemedAmount - principalBalance;
+
+        /// Count voting every ArtWork
+        for () {
+
+        }
 
         /// Select winning address
         address winningAddress;
@@ -150,8 +157,11 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Set next voting deadline
         artWorkDeadline = artWorkDeadline.add(votingInterval);
 
-        artWorkIteration = artWorkIteration.add(1);
-        topProject[artWorkIteration] = 0;
+        /// "artWorkVotingRound" is number of voting round
+        /// Set next voting round
+        /// Initialize the top project of next voting round
+        artWorkVotingRound = artWorkVotingRound.add(1);
+        topProject[artWorkVotingRound] = 0;
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
     }

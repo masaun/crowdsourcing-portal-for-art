@@ -9,7 +9,7 @@ import "./McEvents.sol";
 contract McStorage is McObjects, McEvents {
 
     ///////////////////////////////////
-    // @dev - Define as memory
+    // @dev - Define as variable
     ///////////////////////////////////
     address admin;
 
@@ -20,10 +20,13 @@ contract McStorage is McObjects, McEvents {
 
     uint votingInterval;
     uint artWorkDeadline;
-    
+
+    uint[] topProjectArtWorkIds;
+
+
 
     //////////////////////////////////
-    // @dev - Define as storage
+    // @dev - Define as mapping
     ///////////////////////////////////
     mapping (address => uint) depositedDai;
 

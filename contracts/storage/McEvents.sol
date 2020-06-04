@@ -22,7 +22,8 @@ contract McEvents {
     event VoteForArtWork(
         uint artWorkVotes,      // For calculate deposited amount of each artworkId
         uint artworkVoteCount,  // For counting vote of each artworkId
-        uint topProjectVotes
+        uint topProjectVoteCount,
+        uint[] topProjectArtWorkIds
     );
 
     event DistributeFunds(

@@ -111,15 +111,16 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         /// Update current top project (artwork)
         uint currentArtWorkId = artWorkId;
-        uint topProjectArtWorkId;
         uint topProjectVoteCount;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
                 topProjectVoteCount = artworkVoteCount[artWorkVotingRound][i];
             } 
-        } 
-        //topProjectArtWorkId = getTopProjectArtWorkId(topProjectVotes);
+        }
 
+        uint[] memory topProjectArtWorkIds;
+        getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
+        topProjectArtWorkIds = returnTopProjectArtWorkIds();
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
         if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
@@ -128,19 +129,27 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
-                            topProjectVotes);
+                            topProjectVoteCount,
+                            returnTopProjectArtWorkIds());
     }
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds
-    function getTopProjectArtWorkId(uint _artWorkVotingRound, uint _topProjectVoteCount) returns (uint) {
-        // for (uint i=0; i < currentArtWorkId; i++) {
-        //     if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
-        //         topProjectVotes = artworkVoteCount[artWorkVotingRound][i];
-        //     } 
-        // } 
-
-        // return artworkVoteCount[_artWorkVotingRound][_artWorkIdToVoteFor];
+    function getTopProjectArtWorkIds(uint _artWorkVotingRound, uint _topProjectVoteCount) public {
+        for (uint i=0; i < currentArtWorkId; i++) {
+            if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
+                topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
+            } 
+        } 
     }
+
+    function returnTopProjectArtWorkIds() public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
+        uint topProjectArtWorkIdsLength = topProjectArtWorkIds.length;
+
+        uint[] memory topProjectArtWorkIdsMemory = new uint[](topProjectArtWorkIdsLength);
+        topProjectArtWorkIdsMemory = topProjectArtWorkIds;
+        return topProjectArtWorkIdsMemory;
+    }
+    
     
 
 

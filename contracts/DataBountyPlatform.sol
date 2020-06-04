@@ -130,7 +130,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
                             topProjectVoteCount,
-                            returnTopProjectArtWorkIds());
+                            topProjectArtWorkIds);
     }
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds

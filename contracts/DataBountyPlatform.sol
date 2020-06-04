@@ -123,9 +123,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         topProjectArtWorkIds = returnTopProjectArtWorkIds();
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
-        if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
-            topProject[artWorkVotingRound] = artWorkId;
-        }
+        // if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
+        //     topProject[artWorkVotingRound] = artWorkId;
+        // }
 
         emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
@@ -135,6 +135,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds
     function getTopProjectArtWorkIds(uint _artWorkVotingRound, uint _topProjectVoteCount) public {
+        uint currentArtWorkId = artWorkId;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
                 topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);

@@ -106,9 +106,20 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Save who user voted for  
         usersNominatedProject[artWorkVotingRound][msg.sender] = artWorkIdToVoteFor;
 
-        /// Update current top project (artwork)
+        /// Update voting count of voted artworkId
         artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor] = artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor].add(1);
-        uint topProjectVotes = artWorkVotes[artWorkVotingRound][topProject[artWorkVotingRound]];
+
+        /// Update current top project (artwork)
+        uint currentArtWorkId = artWorkId;
+        uint topProjectArtWorkId;
+        uint topProjectVoteCount;
+        for (uint i=0; i < currentArtWorkId; i++) {
+            if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
+                topProjectVoteCount = artworkVoteCount[artWorkVotingRound][i];
+            } 
+        } 
+        //topProjectArtWorkId = getTopProjectArtWorkId(topProjectVotes);
+
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
         if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
@@ -119,6 +130,19 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
                             topProjectVotes);
     }
+
+    /// Need to execute for-loop in frontend to get TopProjectArtWorkIds
+    function getTopProjectArtWorkId(uint _artWorkVotingRound, uint _topProjectVoteCount) returns (uint) {
+        // for (uint i=0; i < currentArtWorkId; i++) {
+        //     if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
+        //         topProjectVotes = artworkVoteCount[artWorkVotingRound][i];
+        //     } 
+        // } 
+
+        // return artworkVoteCount[_artWorkVotingRound][_artWorkIdToVoteFor];
+    }
+    
+
 
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
@@ -171,7 +195,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
 
     /***
-     * @notice - Get balance
+     * @notice - Getter Function
      **/
     function balanceOfContract() public view returns (uint balanceOfContract_DAI, uint balanceOfContract_ETH) {
         return (dai.balanceOf(address(this)), address(this).balance);

@@ -19,6 +19,12 @@ contract McEvents {
         string artWorkHash
     );
 
+    event VoteForArtWork(
+        uint artWorkVotes,      // For calculate deposited amount of each artworkId
+        uint artworkVoteCount,  // For counting vote of each artworkId
+        uint topProjectVotes
+    );
+
     event DistributeFunds(
         uint redeemedAmount, 
         uint principalBalance, 

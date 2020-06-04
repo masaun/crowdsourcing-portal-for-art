@@ -100,18 +100,24 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         }
 
         /// "artWorkVotingRound" is what number of voting round are.
-        /// Save what voting round is and who user voted for 
+        /// Save what voting round is / who user voted for / how much user deposited
         artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor] = artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor].add(depositedDai[msg.sender]);
 
         /// Save who user voted for  
         usersNominatedProject[artWorkVotingRound][msg.sender] = artWorkIdToVoteFor;
 
+        /// Update current top project (artwork)
+        artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor] = artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor].add(1);
         uint topProjectVotes = artWorkVotes[artWorkVotingRound][topProject[artWorkVotingRound]];
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
         if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
             topProject[artWorkVotingRound] = artWorkId;
         }
+
+        emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
+                            artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
+                            topProjectVotes);
     }
 
     /***
@@ -138,9 +144,6 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint currentInterestIncome = redeemedAmount - principalBalance;
 
         /// Count voting every ArtWork
-        for () {
-
-        }
 
         /// Select winning address
         address winningAddress;

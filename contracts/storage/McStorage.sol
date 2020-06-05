@@ -9,21 +9,24 @@ import "./McEvents.sol";
 contract McStorage is McObjects, McEvents {
 
     ///////////////////////////////////
-    // @dev - Define as memory
+    // @dev - Define as variable
     ///////////////////////////////////
     address admin;
 
     uint totalDepositedDai;
 
-    uint artWorkId;
-    uint artWorkIteration;
+    //uint artWorkId;
+    uint artWorkVotingRound;
 
     uint votingInterval;
     uint artWorkDeadline;
-    
+
+    uint[] topProjectArtWorkIds;
+
+
 
     //////////////////////////////////
-    // @dev - Define as storage
+    // @dev - Define as mapping
     ///////////////////////////////////
     mapping (address => uint) depositedDai;
 
@@ -32,6 +35,8 @@ contract McStorage is McObjects, McEvents {
     mapping(uint256 => ArtWorkState) public artWorkState; // Artwork Id to current state
 
     mapping(uint256 => mapping(address => uint256)) public usersNominatedProject; // Means user can only have one project.
-    mapping(uint256 => mapping(uint256 => uint256)) public artWorkVotes;
+    mapping(uint256 => mapping(uint256 => uint256)) public artWorkVotes;          // For calculate deposited amount of each artworkId
     mapping(uint256 => uint256) public topProject;
+
+    mapping(uint256 => mapping(uint256 => uint256)) public artworkVoteCount;  // For counting vote of each artworkId
 }

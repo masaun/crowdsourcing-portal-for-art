@@ -32,6 +32,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     uint totalDepositedDai;
     uint artWorkVotingRound;
     uint[] topProjectArtWorkIds;
+    uint topProjectVoteCount;
 
     IERC20 public dai;
     ILendingPool public lendingPool;
@@ -118,16 +119,15 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         /// Update current top project (artwork)
         uint currentArtWorkId = artWorkId;
-        uint topProjectVoteCount;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
                 topProjectVoteCount = artworkVoteCount[artWorkVotingRound][i];
             } 
         }
 
-        uint[] memory topProjectArtWorkIds;
+        uint[] memory _topProjectArtWorkIds;
         getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
-        topProjectArtWorkIds = returnTopProjectArtWorkIds();
+        _topProjectArtWorkIds = returnTopProjectArtWorkIds();
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
         // if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
@@ -137,7 +137,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
                             topProjectVoteCount,
-                            topProjectArtWorkIds);
+                            _topProjectArtWorkIds);
     }
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds

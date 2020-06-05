@@ -201,7 +201,8 @@ export default class DataBountyPlatform extends Component {
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
-            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAIaave"]; //@dev - DAI（on Ropsten）
+            let DAI_ADDRESS = tokenAddressList["Kovan"]["DAIaave"];     //@dev - DAI（on Kovan）
+            //let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAIaave"]; //@dev - DAI（on Ropsten）
             instanceDai = new web3.eth.Contract(
               Erc20.abi,
               DAI_ADDRESS,

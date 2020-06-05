@@ -27,6 +27,8 @@ import "./aave/contracts/interfaces/IAToken.sol";
 contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConstants {
     using SafeMath for uint;
 
+    uint artWorkId;
+
     IERC20 public dai;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;

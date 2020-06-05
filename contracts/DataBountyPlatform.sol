@@ -27,6 +27,9 @@ import "./aave/contracts/interfaces/IAToken.sol";
 contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConstants {
     using SafeMath for uint;
 
+    uint artWorkId;
+    uint newArtWorkId;
+
     IERC20 public dai;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
@@ -75,13 +78,14 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
      **/
     function createArtWork(string memory artWorkHash) public returns (uint newArtWorkId) {
         // The first artwork will have an ID of 1
-        artWorkId.add(1);
+        //newArtWorkId = artWorkId.add(1);
+        newArtWorkId = artWorkId++;
 
         artWorkOwner[newArtWorkId] = msg.sender;
         artWorkState[newArtWorkId] = ArtWorkState.Active;
         artWorkDetails[newArtWorkId] = artWorkHash;
 
-        emit CreateArtWork(artWorkId, 
+        emit CreateArtWork(newArtWorkId, 
                            artWorkOwner[newArtWorkId], 
                            artWorkState[newArtWorkId], 
                            artWorkDetails[newArtWorkId]);

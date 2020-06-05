@@ -33,7 +33,6 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     uint artWorkVotingRound;
     uint[] topProjectArtWorkIds;
 
-
     IERC20 public dai;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
@@ -146,7 +145,8 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint currentArtWorkId = artWorkId;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
-                topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
+                topProjectArtWorkIds.push(i);
+                //topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
             } 
         } 
     }

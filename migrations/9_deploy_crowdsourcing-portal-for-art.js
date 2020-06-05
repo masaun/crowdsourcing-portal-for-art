@@ -10,11 +10,16 @@ var contractAddressList = require('./contractAddress/contractAddress.js');
 var tokenAddressList = require('./tokenAddress/tokenAddress.js');
 var walletAddressList = require('./walletAddress/walletAddress.js');
 
-const daiAddress = tokenAddressList["Ropsten"]["DAIaave"]; /// DAI address on Ropsten（from AAVE fancet）
-const _lendingPool = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
-const _lendingPoolCore = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
-const _lendingPoolAddressesProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
-const _aDai = tokenAddressList["Ropsten"]["aDAI"]; /// aDAI address on Ropsten
+const daiAddress = tokenAddressList["Kovan"]["DAIaave"];                              /// DAI address on Kovan（from AAVE fancet）
+const _lendingPool = contractAddressList["Kovan"]["Aave"]["LendingPool"];
+const _lendingPoolCore = contractAddressList["Kovan"]["Aave"]["LendingPoolCore"];
+const _lendingPoolAddressesProvider = contractAddressList["Kovan"]["Aave"]["LendingPoolAddressesProvider"];
+const _aDai = tokenAddressList["Kovan"]["aDAI"];                                      /// aDAI address on Kovan
+// const daiAddress = tokenAddressList["Ropsten"]["DAIaave"];                           /// DAI address on Ropsten（from AAVE fancet）
+// const _lendingPool = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
+// const _lendingPoolCore = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
+// const _lendingPoolAddressesProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
+// const _aDai = tokenAddressList["Ropsten"]["aDAI"];                                   /// aDAI address on Ropsten
 
 const depositedAmount = web3.utils.toWei("0.15");    // 0.15 DAI which is deposited in deployed contract. 
 

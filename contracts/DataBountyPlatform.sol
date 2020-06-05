@@ -29,6 +29,10 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
     uint artWorkId;
     uint newArtWorkId;
+    uint totalDepositedDai;
+    uint artWorkVotingRound;
+    uint[] topProjectArtWorkIds;
+
 
     IERC20 public dai;
     ILendingPool public lendingPool;

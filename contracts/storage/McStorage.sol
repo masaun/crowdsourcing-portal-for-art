@@ -9,20 +9,11 @@ import "./McEvents.sol";
 contract McStorage is McObjects, McEvents {
 
     ///////////////////////////////////
-    // @dev - Define as variable
+    // @dev - This is only variable which value are assigned in "constructor"
     ///////////////////////////////////
     address admin;
-
-    uint totalDepositedDai;
-
-    //uint artWorkId;
-    uint artWorkVotingRound;
-
     uint votingInterval;
     uint artWorkDeadline;
-
-    uint[] topProjectArtWorkIds;
-
 
 
     //////////////////////////////////

@@ -15,7 +15,7 @@ contract McStorage is McObjects, McEvents {
 
     uint totalDepositedDai;
 
-    //uint artWorkId;
+    uint artWorkId;
     uint artWorkVotingRound;
 
     uint votingInterval;

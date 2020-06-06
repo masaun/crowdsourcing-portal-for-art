@@ -32,6 +32,11 @@ contract McEvents {
         uint currentInterestIncome
     );
     
+    event InitializeAfterDistributeFunds(
+        uint[] topProjectArtWorkIds,
+        uint topProjectVoteCount
+    );
+    
     
 
 

@@ -32,6 +32,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     uint totalDepositedDai;
     uint artWorkVotingRound;
     uint[] topProjectArtWorkIds;
+    //mapping (uint => uint[]) topProjectArtWorkIds;
     uint topProjectVoteCount;
 
     IERC20 public dai;
@@ -206,9 +207,11 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Initialize the top project of next voting round
         artWorkVotingRound = artWorkVotingRound.add(1);   /// "artWorkVotingRound" is number of voting round
         topProjectVoteCount = 0;
+        delete topProjectArtWorkIds[topProjectArtWorkIds.length - 1];
         //topProjectArtWorkIds = [];
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
+        emit InitializeAfterDistributeFunds(topProjectArtWorkIds, topProjectVoteCount);
     }
 
 

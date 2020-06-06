@@ -31,8 +31,8 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     uint newArtWorkId;
     uint totalDepositedDai;
     uint artWorkVotingRound;
-    uint[] topProjectArtWorkIds;
-    //mapping (uint => uint[]) topProjectArtWorkIds;
+    //uint[] topProjectArtWorkIds;
+    mapping (uint => uint[]) topProjectArtWorkIds;
     uint topProjectVoteCount;
 
     IERC20 public dai;
@@ -128,7 +128,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         uint[] memory _topProjectArtWorkIds;
         getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
-        _topProjectArtWorkIds = returnTopProjectArtWorkIds();
+        _topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
         // if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
@@ -146,17 +146,17 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint currentArtWorkId = artWorkId;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
-                topProjectArtWorkIds.push(i);
+                topProjectArtWorkIds[_artWorkVotingRound].push(i);
                 //topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
             } 
         } 
     }
 
-    function returnTopProjectArtWorkIds() public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
-        uint topProjectArtWorkIdsLength = topProjectArtWorkIds.length;
+    function returnTopProjectArtWorkIds(uint _artWorkVotingRound) public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
+        uint topProjectArtWorkIdsLength = topProjectArtWorkIds[_artWorkVotingRound].length;
 
         uint[] memory topProjectArtWorkIdsMemory = new uint[](topProjectArtWorkIdsLength);
-        topProjectArtWorkIdsMemory = topProjectArtWorkIds;
+        topProjectArtWorkIdsMemory = topProjectArtWorkIds[_artWorkVotingRound];
         return topProjectArtWorkIdsMemory;
     }
     
@@ -166,15 +166,10 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
      **/
-    function distributeFunds(address _reserve, uint16 _referralCode) public onlyAdmin(admin) {
+    function distributeFunds(uint _artWorkVotingRound, address _reserve, uint16 _referralCode) public onlyAdmin(admin) {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
         require(artWorkDeadline < now, "current vote still active");
-
-        if (topProject[artWorkVotingRound] != 0) {
-            // TODO: do the payout!
-
-        }
 
         /// Redeem
         address _user = address(this);
@@ -207,11 +202,11 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Initialize the top project of next voting round
         artWorkVotingRound = artWorkVotingRound.add(1);   /// "artWorkVotingRound" is number of voting round
         topProjectVoteCount = 0;
-        delete topProjectArtWorkIds[topProjectArtWorkIds.length - 1];
+        delete topProjectArtWorkIds[topProjectArtWorkIds[_artWorkVotingRound].length - 1];
         //topProjectArtWorkIds = [];
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
-        emit InitializeAfterDistributeFunds(topProjectArtWorkIds, topProjectVoteCount);
+        emit InitializeAfterDistributeFunds(topProjectArtWorkIds[_artWorkVotingRound], topProjectVoteCount);
     }
 
 

@@ -42,7 +42,7 @@ module.exports = async function(deployer, network, accounts) {
     );
 
     //@dev - Transfer 2.1 DAI from deployer's address to contract address in advance
-    const dataBountyPlatform = await DataBountyPlatform.deployed();
-    const iERC20 = await IERC20.at(daiAddress);
-    await iERC20.transfer(dataBountyPlatform.address, depositedAmount);
+    // const dataBountyPlatform = await DataBountyPlatform.deployed();
+    // const iERC20 = await IERC20.at(daiAddress);
+    // await iERC20.transfer(dataBountyPlatform.address, depositedAmount);
 };

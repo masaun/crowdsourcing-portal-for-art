@@ -151,6 +151,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         } 
     }
 
+    /***
+     * @notice - Storage can't specify returned value. That's why it create memory instead of storage and utilize as retruned value
+     **/
     function returnTopProjectArtWorkIds(uint _artWorkVotingRound) public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
         uint topProjectArtWorkIdsLength = topProjectArtWorkIds[_artWorkVotingRound].length;
 

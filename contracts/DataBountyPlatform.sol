@@ -202,11 +202,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Initialize the top project of next voting round
         artWorkVotingRound = artWorkVotingRound.add(1);   /// "artWorkVotingRound" is number of voting round
         topProjectVoteCount = 0;
-        delete topProjectArtWorkIds[topProjectArtWorkIds[_artWorkVotingRound].length - 1];
-        //topProjectArtWorkIds = [];
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
-        emit InitializeAfterDistributeFunds(topProjectArtWorkIds[_artWorkVotingRound], topProjectVoteCount);
+        emit InitializeAfterDistributeFunds(topProjectArtWorkIds[artWorkVotingRound], topProjectVoteCount);
     }
 
 

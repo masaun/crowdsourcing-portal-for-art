@@ -29,6 +29,11 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
     uint artWorkId;
     uint newArtWorkId;
+    uint totalDepositedDai;
+    uint artWorkVotingRound;
+    //uint[] topProjectArtWorkIds;
+    mapping (uint => uint[]) topProjectArtWorkIds;
+    uint topProjectVoteCount;
 
     IERC20 public dai;
     ILendingPool public lendingPool;
@@ -115,16 +120,15 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         /// Update current top project (artwork)
         uint currentArtWorkId = artWorkId;
-        uint topProjectVoteCount;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
                 topProjectVoteCount = artworkVoteCount[artWorkVotingRound][i];
             } 
         }
 
-        uint[] memory topProjectArtWorkIds;
+        uint[] memory _topProjectArtWorkIds;
         getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
-        topProjectArtWorkIds = returnTopProjectArtWorkIds();
+        _topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);
 
         // TODO:: if they are equal there is a problem (we must handle this!!)
         // if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
@@ -134,7 +138,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
                             topProjectVoteCount,
-                            topProjectArtWorkIds);
+                            _topProjectArtWorkIds);
     }
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds
@@ -142,16 +146,17 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint currentArtWorkId = artWorkId;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
-                topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
+                topProjectArtWorkIds[_artWorkVotingRound].push(i);
+                //topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
             } 
         } 
     }
 
-    function returnTopProjectArtWorkIds() public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
-        uint topProjectArtWorkIdsLength = topProjectArtWorkIds.length;
+    function returnTopProjectArtWorkIds(uint _artWorkVotingRound) public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
+        uint topProjectArtWorkIdsLength = topProjectArtWorkIds[_artWorkVotingRound].length;
 
         uint[] memory topProjectArtWorkIdsMemory = new uint[](topProjectArtWorkIdsLength);
-        topProjectArtWorkIdsMemory = topProjectArtWorkIds;
+        topProjectArtWorkIdsMemory = topProjectArtWorkIds[_artWorkVotingRound];
         return topProjectArtWorkIdsMemory;
     }
     
@@ -161,15 +166,10 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     /***
      * @notice - Distribute fund into selected ArtWork by voting)
      **/
-    function distributeFunds(address _reserve, uint16 _referralCode) public onlyAdmin(admin) {
+    function distributeFunds(uint _artWorkVotingRound, address _reserve, uint16 _referralCode) public onlyAdmin(admin) {
         // On a *whatever we decide basis* the funds are distributed to the winning project
         // E.g. every 2 weeks, the project with the most votes gets the generated interest.
         require(artWorkDeadline < now, "current vote still active");
-
-        if (topProject[artWorkVotingRound] != 0) {
-            // TODO: do the payout!
-
-        }
 
         /// Redeem
         address _user = address(this);
@@ -198,13 +198,13 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Set next voting deadline
         artWorkDeadline = artWorkDeadline.add(votingInterval);
 
-        /// "artWorkVotingRound" is number of voting round
         /// Set next voting round
         /// Initialize the top project of next voting round
-        artWorkVotingRound = artWorkVotingRound.add(1);
-        topProject[artWorkVotingRound] = 0;
+        artWorkVotingRound = artWorkVotingRound.add(1);   /// "artWorkVotingRound" is number of voting round
+        topProjectVoteCount = 0;
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
+        emit InitializeAfterDistributeFunds(topProjectArtWorkIds[artWorkVotingRound], topProjectVoteCount);
     }
 
 

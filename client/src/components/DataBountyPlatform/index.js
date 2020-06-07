@@ -88,10 +88,11 @@ export default class DataBountyPlatform extends Component {
     distributeFunds = async () => {
         const { accounts, web3, dai, data_bounty_platform, DAI_ADDRESS } = this.state;
 
-        const _reserve = DAI_ADDRESS;  /// DAI(aave) on Ropsten
+        const _artWorkVotingRound = 0;  /// artWorkVotingRound count is started from "0"
+        const _reserve = DAI_ADDRESS;   /// DAI(aave) on Ropsten
         const _referralCode = 0;
 
-        let res = await data_bounty_platform.methods.distributeFunds(_reserve, _referralCode).send({ from: accounts[0] });
+        let res = await data_bounty_platform.methods.distributeFunds(_artWorkVotingRound, _reserve, _referralCode).send({ from: accounts[0] });
         console.log('=== distributeFunds() ===\n', res);        
     }
 
@@ -201,7 +202,8 @@ export default class DataBountyPlatform extends Component {
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
-            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAIaave"]; //@dev - DAI（on Ropsten）
+            let DAI_ADDRESS = tokenAddressList["Kovan"]["DAIaave"];     //@dev - DAI（on Kovan）
+            //let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAIaave"]; //@dev - DAI（on Ropsten）
             instanceDai = new web3.eth.Contract(
               Erc20.abi,
               DAI_ADDRESS,

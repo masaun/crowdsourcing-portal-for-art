@@ -31,8 +31,7 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
     uint newArtWorkId;
     uint totalDepositedDai;
     uint artWorkVotingRound;
-    //uint[] topProjectArtWorkIds;
-    mapping (uint => uint[]) topProjectArtWorkIds;
+    mapping (uint => uint[]) topProjectArtWorkIds;  /// Key is "artWorkVotingRound"
     uint topProjectVoteCount;
 
     IERC20 public dai;

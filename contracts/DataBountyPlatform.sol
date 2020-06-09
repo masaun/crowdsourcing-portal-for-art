@@ -121,16 +121,6 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint topProjectVoteCount;
         uint[] memory topProjectArtWorkIds;
         (topProjectVoteCount, topProjectArtWorkIds) = getTopProject(artWorkVotingRound);
-        // uint currentArtWorkId = artWorkId;
-        // for (uint i=0; i < currentArtWorkId; i++) {
-        //     if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
-        //         topProjectVoteCount = artworkVoteCount[artWorkVotingRound][i];
-        //     } 
-        // }
-
-        // uint[] memory topProjectArtWorkIds;
-        // getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
-        // topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);
 
         emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
@@ -203,12 +193,25 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         (_topProjectVoteCount, _topProjectArtWorkIds) = getTopProject(_artWorkVotingRound);      
 
         /// Select winning address
-        address winningAddress;
-        winningAddress = 0x8Fc9d07b1B9542A71C4ba1702Cd230E160af6EB3;  /// Wallet address for testing
+        //address winningAddress;
+        //winningAddress = 0x8Fc9d07b1B9542A71C4ba1702Cd230E160af6EB3;  /// Wallet address for testing
 
         /// Transfer redeemed Interest income into winning address
-        dai.approve(winningAddress, currentInterestIncome);
-        dai.transfer(winningAddress, currentInterestIncome);
+        for (uint i=0; i < _topProjectArtWorkIds.length; i++) {
+            if (i == 0) {
+                address winningAddress = i;
+                dai.approve(winningAddress, currentInterestIncome);
+                dai.transfer(winningAddress, currentInterestIncome);
+            } else if (i > 0) {
+                if (_topProjectArtWorkIds[i] != _topProjectArtWorkIds[i-1]) {
+                    address winningAddress = i;
+                    dai.approve(winningAddress, currentInterestIncome);
+                    dai.transfer(winningAddress, currentInterestIncome);                    
+                }
+            }
+        }
+        //dai.approve(winningAddress, currentInterestIncome);
+        //dai.transfer(winningAddress, currentInterestIncome);
 
         /// Re-lending principal balance into AAVE
         dai.approve(lendingPoolAddressesProvider.getLendingPoolCore(), principalBalance);

@@ -118,6 +118,28 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor] = artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor].add(1);
 
         /// Update current top project (artwork)
+        uint topProjectVoteCount;
+        uint[] memory topProjectArtWorkIds;
+        (topProjectVoteCount, topProjectArtWorkIds) = getTopProject(artWorkVotingRound);
+        // uint currentArtWorkId = artWorkId;
+        // for (uint i=0; i < currentArtWorkId; i++) {
+        //     if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
+        //         topProjectVoteCount = artworkVoteCount[artWorkVotingRound][i];
+        //     } 
+        // }
+
+        // uint[] memory topProjectArtWorkIds;
+        // getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
+        // topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);
+
+        emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
+                            artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
+                            topProjectVoteCount,
+                            topProjectArtWorkIds);
+    }
+
+    function getTopProject(uint artWorkVotingRound) public returns (uint topProjectVoteCount, uint[] memory topProjectArtWorkIds) {
+        /// Update current top project (artwork)
         uint currentArtWorkId = artWorkId;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
@@ -127,17 +149,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         uint[] memory _topProjectArtWorkIds;
         getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
-        _topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);
+        _topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);      
 
-        // TODO:: if they are equal there is a problem (we must handle this!!)
-        // if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
-        //     topProject[artWorkVotingRound] = artWorkId;
-        // }
-
-        emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
-                            artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
-                            topProjectVoteCount,
-                            _topProjectArtWorkIds);
+        return (topProjectVoteCount, _topProjectArtWorkIds);  
     }
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds
@@ -184,6 +198,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint currentInterestIncome = redeemedAmount - principalBalance;
 
         /// Count voting every ArtWork
+        uint _topProjectVoteCount;
+        uint[] memory _topProjectArtWorkIds;
+        (_topProjectVoteCount, _topProjectArtWorkIds) = getTopProject(_artWorkVotingRound);      
 
         /// Select winning address
         address winningAddress;

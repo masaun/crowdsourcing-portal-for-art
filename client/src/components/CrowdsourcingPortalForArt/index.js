@@ -45,14 +45,14 @@ export default class CrowdsourcingPortalForArt extends Component {
      * @notice - AAVE related functions
      **/
     joinPool = async () => {
-        const { accounts, web3, dai, data_bounty_platform, DAI_ADDRESS, DATA_BOUNTY_PLATFORM_ADDRESS } = this.state;
+        const { accounts, web3, dai, crowdsourcing_portal_for_art, DAI_ADDRESS, CROWDSOURCING_PORTAL_FOR_ART_ADDRESS } = this.state;
 
         const _reserve = DAI_ADDRESS;  /// DAI(aave) on Ropsten
         const _amount = web3.utils.toWei('0.12345', 'ether');
         const _referralCode = 0;
 
-        let res1 = await dai.methods.approve(DATA_BOUNTY_PLATFORM_ADDRESS, _amount).send({ from: accounts[0] });
-        let res2 = await data_bounty_platform.methods.joinPool(_reserve, _amount, _referralCode).send({ from: accounts[0] });
+        let res1 = await dai.methods.approve(CROWDSOURCING_PORTAL_FOR_ART_ADDRESS, _amount).send({ from: accounts[0] });
+        let res2 = await crowdsourcing_portal_for_art.methods.joinPool(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== joinPool() ===\n', res2);                
     }
 
@@ -60,12 +60,12 @@ export default class CrowdsourcingPortalForArt extends Component {
      * @notice - Create artwork and list them.
      **/
     createArtWork = async () => {
-        const { accounts, web3, dai, data_bounty_platform } = this.state;
+        const { accounts, web3, dai, crowdsourcing_portal_for_art } = this.state;
 
         const artworkName = "Artwork of the tiger";
         const _artWorkHash = web3.utils.toHex(artworkName);
 
-        let res = await data_bounty_platform.methods.createArtWork(_artWorkHash).send({ from: accounts[0] });
+        let res = await crowdsourcing_portal_for_art.methods.createArtWork(_artWorkHash).send({ from: accounts[0] });
         console.log('=== createArtWork() ===\n', res);           
     }
 
@@ -73,11 +73,11 @@ export default class CrowdsourcingPortalForArt extends Component {
      * @notice - Vote for a favorite ArtWork of voter (voter is only user who deposited before)
      **/
     voteForArtWork = async () => {
-        const { accounts, web3, dai, data_bounty_platform } = this.state;
+        const { accounts, web3, dai, crowdsourcing_portal_for_art } = this.state;
 
         const _artWorkIdToVoteFor = 1;
 
-        let res = await data_bounty_platform.methods.voteForArtWork(_artWorkIdToVoteFor).send({ from: accounts[0] });
+        let res = await crowdsourcing_portal_for_art.methods.voteForArtWork(_artWorkIdToVoteFor).send({ from: accounts[0] });
         console.log('=== voteForArtWork() ===\n', res);           
     }
 
@@ -86,13 +86,13 @@ export default class CrowdsourcingPortalForArt extends Component {
      * @notice - Distribute fund into selected CompanyProfile by voting)
      **/
     distributeFunds = async () => {
-        const { accounts, web3, dai, data_bounty_platform, DAI_ADDRESS } = this.state;
+        const { accounts, web3, dai, crowdsourcing_portal_for_art, DAI_ADDRESS } = this.state;
 
         const _artWorkVotingRound = 0;  /// artWorkVotingRound count is started from "0"
         const _reserve = DAI_ADDRESS;   /// DAI(aave) on Ropsten
         const _referralCode = 0;
 
-        let res = await data_bounty_platform.methods.distributeFunds(_artWorkVotingRound, _reserve, _referralCode).send({ from: accounts[0] });
+        let res = await crowdsourcing_portal_for_art.methods.distributeFunds(_artWorkVotingRound, _reserve, _referralCode).send({ from: accounts[0] });
         console.log('=== distributeFunds() ===\n', res);        
     }
 
@@ -101,9 +101,9 @@ export default class CrowdsourcingPortalForArt extends Component {
      * @notice - Getter Functions
      **/
     _balanceOfContract = async () => {
-        const { accounts, web3, dai, data_bounty_platform } = this.state;
+        const { accounts, web3, dai, crowdsourcing_portal_for_art } = this.state;
 
-        let res1 = await data_bounty_platform.methods.balanceOfContract().call();
+        let res1 = await crowdsourcing_portal_for_art.methods.balanceOfContract().call();
         console.log('=== balanceOfContract() ===\n', res1);
     }
 
@@ -111,9 +111,9 @@ export default class CrowdsourcingPortalForArt extends Component {
      * @notice - Test Functions
      **/    
     getAaveRelatedFunction = async () => {
-        const { accounts, web3, dai, data_bounty_platform } = this.state;
+        const { accounts, web3, dai, crowdsourcing_portal_for_art } = this.state;
 
-        const aaveRelatedResult = await data_bounty_platform.methods.getAaveRelatedFunction().call();
+        const aaveRelatedResult = await crowdsourcing_portal_for_art.methods.getAaveRelatedFunction().call();
         console.log('=== getAaveRelatedFunction ===', aaveRelatedResult);
     }
 
@@ -187,7 +187,7 @@ export default class CrowdsourcingPortalForArt extends Component {
             // Create instance of contracts
             let instanceCrowdsourcingPortalForArt = null;
             let deployedNetwork = null;
-            let DATA_BOUNTY_PLATFORM_ADDRESS = CrowdsourcingPortalForArt.networks[networkId.toString()].address;
+            let CROWDSOURCING_PORTAL_FOR_ART_ADDRESS = CrowdsourcingPortalForArt.networks[networkId.toString()].address;
             if (CrowdsourcingPortalForArt.networks) {
               deployedNetwork = CrowdsourcingPortalForArt.networks[networkId.toString()];
               if (deployedNetwork) {
@@ -232,10 +232,10 @@ export default class CrowdsourcingPortalForArt extends Component {
                 networkType, 
                 hotLoaderDisabled,
                 isMetaMask, 
-                data_bounty_platform: instanceCrowdsourcingPortalForArt,
+                crowdsourcing_portal_for_art: instanceCrowdsourcingPortalForArt,
                 dai: instanceDai,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
-                DATA_BOUNTY_PLATFORM_ADDRESS : DATA_BOUNTY_PLATFORM_ADDRESS,
+                CROWDSOURCING_PORTAL_FOR_ART_ADDRESS : CROWDSOURCING_PORTAL_FOR_ART_ADDRESS,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(

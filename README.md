@@ -2,11 +2,22 @@
 
 ***
 ## 【Introduction of Crowdsourcing Portal For Art】
-- This is a dApp that ...
+- This is a dApp that crowdsourcing portal for art for new wildcards.
+  - Anyone become wildcard designer and publish art for new wildcards.
+  - Only user who deposited can vote for a favorite artwork of new wildcard.
+  - Deposited amount from users is pooled and lended into lending-protocol (AAVE). After interests are generated.
+  - Generated interests is distributed into Wildcard designer who got the most voting count.
+    (Deposited amount will be lend again for next voting round)
 
 &nbsp;
 
 ## 【User Flow】
+- ① Wildcard designer publish art for new wildcards
+- ② User deposit DAI.
+- ③ User vote for a favorite artwork of new wildcard.
+    （Only user who deposited can vote for a favorite artwork of new wildcard）
+    （Deposited amount from users is pooled and lended into lending-protocol (AAVE). After interests are generated）
+- ④ Generated interests is distributed into Wildcard designer who got the most voting count.
 
 &nbsp;
 
@@ -55,7 +66,7 @@ $ npm run client
 
 4. Access to browser by using link 
 ```
-http://127.0.0.1:3000/data_bounty_platform
+http://127.0.0.1:3000/crowdsourcing-portal-for-art
 ```
 
 &nbsp;
@@ -69,21 +80,12 @@ http://127.0.0.1:3000/data_bounty_platform
     The latest version of WildCard system gives holders 1 Wildcards Loyalty Token (WLT) per day.  
     https://etherscan.io/token/0x773c75c2277ed3e402bdefd28ec3b51a3afbd8a4
 
-
   - [Repos]  
-    - Hanerger base contract ： https://github.com/wildcards-world/harberger-base-contracts  
-    - harberger-ui：https://github.com/wildcards-world/harberger-ui  
+    - Frontend Example：https://github.com/masaun/crowdsourcing-portal-for-art
+    - DAO.care（ https://dao.care/submit-proposal ）
+      - https://github.com/DAOcare/app/blob/master/src/views/SubmitProposal.js
+      - https://github.com/DAOcare/contracts
 
-  - [Tutorial]
-    - Tutorial①：https://dev.to/wildcards/build-your-first-harberger-tax-app-part-1-3gdd
-    - Tutorial②：
-
-  - [Article]
-    - Patronage As An Asset Class  
-      https://blog.simondlr.com/posts/patronage-as-an-asset-class
-    - What is Harberger-Tax ?  
-      https://medium.com/@simondlr/what-is-harberger-tax-where-does-the-blockchain-fit-in-1329046922c6
-
-  - [VIdeo]
-    - [VIDEO] South Africa’s WildCards Project Becomes the First Scalable "Harberger Tax Contract" Live Deployment on Ethereum  
-    https://bitcoinke.io/2020/01/the-wildcards-project/
+  - [Bounty]
+    - Build A Crowdsourcing Portal For Art For New Wildcards  
+    https://gitcoin.co/issue/wildcards-world/ui/93/4375

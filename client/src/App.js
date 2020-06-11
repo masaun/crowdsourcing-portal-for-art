@@ -88,7 +88,7 @@ class App extends Component {
           deployedNetwork = CrowdsourcingPortalForArt.networks[networkId.toString()];
           if (deployedNetwork) {
             instanceCrowdsourcingPortalForArt = new web3.eth.Contract(
-              DataBountyPlatform.abi,
+              CrowdsourcingPortalForArt.abi,
               deployedNetwork && deployedNetwork.address,
             );
             console.log('=== instanceCrowdsourcingPortalForArt ===', instanceCrowdsourcingPortalForArt);

@@ -32,7 +32,9 @@ contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, M
     uint totalDepositedDai;
     uint artWorkVotingRound;
     mapping (uint => uint[]) topProjectArtWorkIds;  /// Key is "artWorkVotingRound"
-    uint topProjectVoteCount;
+    mapping (uint => uint) topProjectVoteCount;  /// Key is "companyProfileRound"
+    //uint topProjectVoteCount;
+    mapping (uint => uint) topProjectArtWorkIdsCounter; /// Key is "companyProfileRound"
 
     IERC20 public dai;
     ILendingPool public lendingPool;
@@ -122,7 +124,8 @@ contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, M
         uint[] memory topProjectArtWorkIds;
         (topProjectVoteCount, topProjectArtWorkIds) = getTopProject(artWorkVotingRound);
 
-        emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
+        emit VoteForArtWork(artWorkVotingRound,
+                            artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
                             artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
                             topProjectVoteCount,
                             topProjectArtWorkIds);
@@ -150,7 +153,6 @@ contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, M
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
                 topProjectArtWorkIds[_artWorkVotingRound].push(i);
-                //topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
             } 
         } 
     }
@@ -193,25 +195,21 @@ contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, M
         (_topProjectVoteCount, _topProjectArtWorkIds) = getTopProject(_artWorkVotingRound);      
 
         /// Select winning address
-        //address winningAddress;
-        //winningAddress = 0x8Fc9d07b1B9542A71C4ba1702Cd230E160af6EB3;  /// Wallet address for testing
-
         /// Transfer redeemed Interest income into winning address
+        address[] memory winningAddressList;
         for (uint i=0; i < _topProjectArtWorkIds.length; i++) {
-            if (i == 0) {
-                address winningAddress = i;
-                dai.approve(winningAddress, currentInterestIncome);
-                dai.transfer(winningAddress, currentInterestIncome);
-            } else if (i > 0) {
-                if (_topProjectArtWorkIds[i] != _topProjectArtWorkIds[i-1]) {
-                    address winningAddress = i;
-                    dai.approve(winningAddress, currentInterestIncome);
-                    dai.transfer(winningAddress, currentInterestIncome);                    
-                }
-            }
+            winningAddressList = returnWinningAddressList(_artWorkVotingRound, _topProjectArtWorkIds[i]);
         }
-        //dai.approve(winningAddress, currentInterestIncome);
-        //dai.transfer(winningAddress, currentInterestIncome);
+        emit ReturnWinningAddressList(winningAddressList);
+        //uint numberOfWinningAddress = 1;
+        uint numberOfWinningAddress = winningAddressList.length;
+        uint dividedInterestIncome = currentInterestIncome.div(numberOfWinningAddress);
+        for (uint w=0; w < winningAddressList.length; w++) {
+            address winningAddress = winningAddressList[w];
+            dai.approve(winningAddress, dividedInterestIncome);
+            dai.transfer(winningAddress, dividedInterestIncome);
+            emit WinningAddressTransferred(winningAddress);
+        }
 
         /// Re-lending principal balance into AAVE
         dai.approve(lendingPoolAddressesProvider.getLendingPoolCore(), principalBalance);
@@ -223,10 +221,17 @@ contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, M
         /// Set next voting round
         /// Initialize the top project of next voting round
         artWorkVotingRound = artWorkVotingRound.add(1);   /// "artWorkVotingRound" is number of voting round
-        topProjectVoteCount = 0;
+        topProjectVoteCount[artWorkVotingRound] = 0;
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
-        emit InitializeAfterDistributeFunds(topProjectArtWorkIds[artWorkVotingRound], topProjectVoteCount);
+        //emit InitializeAfterDistributeFunds(_topProjectArtWorkIds[artWorkVotingRound], _topProjectVoteCount);
+    }
+
+    function returnWinningAddressList(uint _artWorkVotingRound, uint _votedCompanyProfileId) public view returns(address[] memory _winningAddressListMemory) {
+        uint winningAddressListLength = votedUserAddress[_artWorkVotingRound][_votedCompanyProfileId].length;
+        address[] memory winningAddressListMemory = new address[](winningAddressListLength);
+        winningAddressListMemory = votedUserAddress[_artWorkVotingRound][_votedCompanyProfileId];
+        return winningAddressListMemory;
     }
 
 

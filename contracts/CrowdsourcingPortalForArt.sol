@@ -24,7 +24,7 @@ import "./aave/contracts/interfaces/IAToken.sol";
 /***
  * @notice - This contract is that ...
  **/
-contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConstants {
+contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, McConstants {
     using SafeMath for uint;
 
     uint artWorkId;

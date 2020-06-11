@@ -31,7 +31,7 @@ Kovan Test Network
 ```
 (root directory)
 
-$ npm run migrate:ropsten
+$ npm run migrate:kovan
 ```
 
 &nbsp;

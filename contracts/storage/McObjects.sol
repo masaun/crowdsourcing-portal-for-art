@@ -5,14 +5,6 @@ contract McObjects {
 
     enum ArtWorkState { Active, Withdrawn } // Cooldown
 
-
-
-    /***
-     * @dev - Example
-     **/
-    struct ExampleObject {
-        address addr;
-        uint amount;
-    }
+    
 
 }

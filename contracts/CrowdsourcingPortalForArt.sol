@@ -24,16 +24,17 @@ import "./aave/contracts/interfaces/IAToken.sol";
 /***
  * @notice - This contract is that ...
  **/
-contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConstants {
+contract CrowdsourcingPortalForArt is OwnableOriginal(msg.sender), McModifier, McConstants {
     using SafeMath for uint;
 
     uint artWorkId;
     uint newArtWorkId;
     uint totalDepositedDai;
     uint artWorkVotingRound;
-    //uint[] topProjectArtWorkIds;
-    mapping (uint => uint[]) topProjectArtWorkIds;
-    uint topProjectVoteCount;
+    mapping (uint => uint[]) topProjectArtWorkIds;  /// Key is "artWorkVotingRound"
+    mapping (uint => uint) topProjectVoteCount;  /// Key is "companyProfileRound"
+    //uint topProjectVoteCount;
+    mapping (uint => uint) topProjectArtWorkIdsCounter; /// Key is "companyProfileRound"
 
     IERC20 public dai;
     ILendingPool public lendingPool;
@@ -119,6 +120,19 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor] = artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor].add(1);
 
         /// Update current top project (artwork)
+        uint topProjectVoteCount;
+        uint[] memory topProjectArtWorkIds;
+        (topProjectVoteCount, topProjectArtWorkIds) = getTopProject(artWorkVotingRound);
+
+        emit VoteForArtWork(artWorkVotingRound,
+                            artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
+                            artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
+                            topProjectVoteCount,
+                            topProjectArtWorkIds);
+    }
+
+    function getTopProject(uint artWorkVotingRound) public returns (uint topProjectVoteCount, uint[] memory topProjectArtWorkIds) {
+        /// Update current top project (artwork)
         uint currentArtWorkId = artWorkId;
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[artWorkVotingRound][i] >= topProjectVoteCount) {
@@ -128,17 +142,9 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
 
         uint[] memory _topProjectArtWorkIds;
         getTopProjectArtWorkIds(artWorkVotingRound, topProjectVoteCount);
-        _topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);
+        _topProjectArtWorkIds = returnTopProjectArtWorkIds(artWorkVotingRound);      
 
-        // TODO:: if they are equal there is a problem (we must handle this!!)
-        // if (artWorkVotes[artWorkVotingRound][artWorkId] > topProjectVotes) {
-        //     topProject[artWorkVotingRound] = artWorkId;
-        // }
-
-        emit VoteForArtWork(artWorkVotes[artWorkVotingRound][artWorkIdToVoteFor],
-                            artworkVoteCount[artWorkVotingRound][artWorkIdToVoteFor],
-                            topProjectVoteCount,
-                            _topProjectArtWorkIds);
+        return (topProjectVoteCount, _topProjectArtWorkIds);  
     }
 
     /// Need to execute for-loop in frontend to get TopProjectArtWorkIds
@@ -147,11 +153,13 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         for (uint i=0; i < currentArtWorkId; i++) {
             if (artworkVoteCount[_artWorkVotingRound][i] == _topProjectVoteCount) {
                 topProjectArtWorkIds[_artWorkVotingRound].push(i);
-                //topProjectArtWorkIds.push(artworkVoteCount[artWorkVotingRound][i]);
             } 
         } 
     }
 
+    /***
+     * @notice - Storage can't specify returned value. That's why it create memory instead of storage and utilize as retruned value
+     **/
     function returnTopProjectArtWorkIds(uint _artWorkVotingRound) public view returns(uint[] memory _topProjectArtWorkIdsMemory) {
         uint topProjectArtWorkIdsLength = topProjectArtWorkIds[_artWorkVotingRound].length;
 
@@ -182,14 +190,26 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         uint currentInterestIncome = redeemedAmount - principalBalance;
 
         /// Count voting every ArtWork
+        uint _topProjectVoteCount;
+        uint[] memory _topProjectArtWorkIds;
+        (_topProjectVoteCount, _topProjectArtWorkIds) = getTopProject(_artWorkVotingRound);      
 
         /// Select winning address
-        address winningAddress;
-        winningAddress = 0x8Fc9d07b1B9542A71C4ba1702Cd230E160af6EB3;  /// Wallet address for testing
-
         /// Transfer redeemed Interest income into winning address
-        dai.approve(winningAddress, currentInterestIncome);
-        dai.transfer(winningAddress, currentInterestIncome);
+        address[] memory winningAddressList;
+        for (uint i=0; i < _topProjectArtWorkIds.length; i++) {
+            winningAddressList = returnWinningAddressList(_artWorkVotingRound, _topProjectArtWorkIds[i]);
+        }
+        emit ReturnWinningAddressList(winningAddressList);
+        //uint numberOfWinningAddress = 1;
+        uint numberOfWinningAddress = winningAddressList.length;
+        uint dividedInterestIncome = currentInterestIncome.div(numberOfWinningAddress);
+        for (uint w=0; w < winningAddressList.length; w++) {
+            address winningAddress = winningAddressList[w];
+            dai.approve(winningAddress, dividedInterestIncome);
+            dai.transfer(winningAddress, dividedInterestIncome);
+            emit WinningAddressTransferred(winningAddress);
+        }
 
         /// Re-lending principal balance into AAVE
         dai.approve(lendingPoolAddressesProvider.getLendingPoolCore(), principalBalance);
@@ -201,10 +221,17 @@ contract DataBountyPlatform is OwnableOriginal(msg.sender), McModifier, McConsta
         /// Set next voting round
         /// Initialize the top project of next voting round
         artWorkVotingRound = artWorkVotingRound.add(1);   /// "artWorkVotingRound" is number of voting round
-        topProjectVoteCount = 0;
+        topProjectVoteCount[artWorkVotingRound] = 0;
 
         emit DistributeFunds(redeemedAmount, principalBalance, currentInterestIncome);
-        emit InitializeAfterDistributeFunds(topProjectArtWorkIds[artWorkVotingRound], topProjectVoteCount);
+        //emit InitializeAfterDistributeFunds(_topProjectArtWorkIds[artWorkVotingRound], _topProjectVoteCount);
+    }
+
+    function returnWinningAddressList(uint _artWorkVotingRound, uint _votedCompanyProfileId) public view returns(address[] memory _winningAddressListMemory) {
+        uint winningAddressListLength = votedUserAddress[_artWorkVotingRound][_votedCompanyProfileId].length;
+        address[] memory winningAddressListMemory = new address[](winningAddressListLength);
+        winningAddressListMemory = votedUserAddress[_artWorkVotingRound][_votedCompanyProfileId];
+        return winningAddressListMemory;
     }
 
 

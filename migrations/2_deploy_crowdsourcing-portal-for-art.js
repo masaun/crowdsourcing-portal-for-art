@@ -1,4 +1,4 @@
-var DataBountyPlatform = artifacts.require("DataBountyPlatform");
+var CrowdsourcingPortalForArt = artifacts.require("CrowdsourcingPortalForArt");
 var IERC20 = artifacts.require("IERC20");
 var ILendingPool = artifacts.require("ILendingPool");
 var ILendingPoolCore = artifacts.require("ILendingPoolCore");
@@ -15,11 +15,6 @@ const _lendingPool = contractAddressList["Kovan"]["Aave"]["LendingPool"];
 const _lendingPoolCore = contractAddressList["Kovan"]["Aave"]["LendingPoolCore"];
 const _lendingPoolAddressesProvider = contractAddressList["Kovan"]["Aave"]["LendingPoolAddressesProvider"];
 const _aDai = tokenAddressList["Kovan"]["aDAI"];                                      /// aDAI address on Kovan
-// const daiAddress = tokenAddressList["Ropsten"]["DAIaave"];                         /// DAI address on Ropsten（from AAVE fancet）
-// const _lendingPool = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
-// const _lendingPoolCore = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
-// const _lendingPoolAddressesProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
-// const _aDai = tokenAddressList["Ropsten"]["aDAI"];                                 /// aDAI address on Ropsten
 
 const depositedAmount = web3.utils.toWei("0.15");    // 0.15 DAI which is deposited in deployed contract. 
 
@@ -27,22 +22,22 @@ module.exports = async function(deployer, network, accounts) {
     // Initialize owner address if you want to transfer ownership of contract to some other address
     let ownerAddress = walletAddressList["WalletAddress1"];
 
-    await deployer.deploy(DataBountyPlatform, 
+    await deployer.deploy(CrowdsourcingPortalForArt, 
                           daiAddress,
                           _lendingPool,
                           _lendingPoolCore,
                           _lendingPoolAddressesProvider,
                           _aDai)
-                  .then(async function(dataBountyPlatform) {
+                  .then(async function(crowdsourcingPortalForArt) {
                       if(ownerAddress && ownerAddress!="") {
                           console.log(`=== Transfering ownership to address ${ownerAddress} ===`)
-                          await dataBountyPlatform.transferOwnership(ownerAddress);
+                          await crowdsourcingPortalForArt.transferOwnership(ownerAddress);
                       }
                   }
     );
 
     //@dev - Transfer 2.1 DAI from deployer's address to contract address in advance
-    // const dataBountyPlatform = await DataBountyPlatform.deployed();
+    // const crowdsourcingPortalForArt = await CrowdsourcingPortalForArt.deployed();
     // const iERC20 = await IERC20.at(daiAddress);
-    // await iERC20.transfer(dataBountyPlatform.address, depositedAmount);
+    // await iERC20.transfer(crowdsourcingPortalForArt.address, depositedAmount);
 };

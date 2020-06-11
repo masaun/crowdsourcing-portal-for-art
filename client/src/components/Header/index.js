@@ -7,7 +7,7 @@ const Header = () => (
       <ul>
         <li><a href="/" className={styles.link}><span style={{ padding: "60px" }}> Home </span></a></li>
 
-        <li><a href="/data-bounty-platform" className={styles.link}> Data Bounty Platform</a></li>
+        <li><a href="/crowdsourcing-portal-for-art" className={styles.link}> Crowdsourcing Portal For Art</a></li>
       </ul>
     </nav>
   </div>

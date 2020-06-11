@@ -20,6 +20,7 @@ contract McEvents {
     );
 
     event VoteForArtWork(
+        uint currentArtWorkVotingRound,  // For chekcing current voting round
         uint artWorkVotes,      // For calculate deposited amount of each artworkId
         uint artworkVoteCount,  // For counting vote of each artworkId
         uint topProjectVoteCount,
@@ -36,18 +37,17 @@ contract McEvents {
         uint[] topProjectArtWorkIds,
         uint topProjectVoteCount
     );
-    
-    
 
+    event ReturnWinningAddressList(
+        address[] winningAddressList
+    );
+    
+    event WinningAddressTransferred(
+        address winningAddress
+    );
 
-    /***
-     * @dev - Example
-     **/
-    event Example(
-        uint256 indexed Id, 
-        uint256 exchangeRateCurrent,
-        address msgSender,
-        uint256 approvedValue    
+    event NoWinningAddressTransferred(
+        string notificationMessage
     );
 
 }

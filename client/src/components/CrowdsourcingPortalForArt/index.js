@@ -15,7 +15,7 @@ import { contractAddressList } from '../../data/contractAddress/contractAddress.
 import { tokenAddressList } from '../../data/tokenAddress/tokenAddress.js'
 
 
-export default class DataBountyPlatform extends Component {
+export default class CrowdsourcingPortalForArt extends Component {
     constructor(props) {    
         super(props);
 
@@ -128,9 +128,9 @@ export default class DataBountyPlatform extends Component {
     //////////////////////////////////// 
     ///// Refresh Values
     ////////////////////////////////////
-    refreshValues = (instanceDataBountyPlatform) => {
-        if (instanceDataBountyPlatform) {
-          //console.log('refreshValues of instanceDataBountyPlatform');
+    refreshValues = (instanceCrowdsourcingPortalForArt) => {
+        if (instanceCrowdsourcingPortalForArt) {
+          //console.log('refreshValues of instanceCrowdsourcingPortalForArt');
         }
     }
 
@@ -151,11 +151,11 @@ export default class DataBountyPlatform extends Component {
     componentDidMount = async () => {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
-        let DataBountyPlatform = {};
+        let CrowdsourcingPortalForArt = {};
         let Erc20 = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
-          DataBountyPlatform = require("../../../../build/contracts/DataBountyPlatform.json");
+          CrowdsourcingPortalForArt = require("../../../../build/contracts/CrowdsourcingPortalForArt.json");
           Erc20 = require("../../../../build/contracts/IERC20.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
@@ -185,17 +185,17 @@ export default class DataBountyPlatform extends Component {
             balance = web3.utils.fromWei(balance, 'ether');
 
             // Create instance of contracts
-            let instanceDataBountyPlatform = null;
+            let instanceCrowdsourcingPortalForArt = null;
             let deployedNetwork = null;
-            let DATA_BOUNTY_PLATFORM_ADDRESS = DataBountyPlatform.networks[networkId.toString()].address;
-            if (DataBountyPlatform.networks) {
-              deployedNetwork = DataBountyPlatform.networks[networkId.toString()];
+            let DATA_BOUNTY_PLATFORM_ADDRESS = CrowdsourcingPortalForArt.networks[networkId.toString()].address;
+            if (CrowdsourcingPortalForArt.networks) {
+              deployedNetwork = CrowdsourcingPortalForArt.networks[networkId.toString()];
               if (deployedNetwork) {
-                instanceDataBountyPlatform = new web3.eth.Contract(
-                  DataBountyPlatform.abi,
+                instanceCrowdsourcingPortalForArt = new web3.eth.Contract(
+                  CrowdsourcingPortalForArt.abi,
                   deployedNetwork && deployedNetwork.address,
                 );
-                console.log('=== instanceDataBountyPlatform ===', instanceDataBountyPlatform);
+                console.log('=== instanceCrowdsourcingPortalForArt ===', instanceCrowdsourcingPortalForArt);
               }
             }
 
@@ -220,7 +220,7 @@ export default class DataBountyPlatform extends Component {
             console.log('=== instanceBokkyPooBahsDateTimeContract ===', instanceBokkyPooBahsDateTimeContract);
 
 
-            if (DataBountyPlatform || Erc20 || BokkyPooBahsDateTimeContract) {
+            if (CrowdsourcingPortalForArt || Erc20 || BokkyPooBahsDateTimeContract) {
               // Set web3, accounts, and contract to the state, and then proceed with an
               // example of interacting with the contract's methods.
               this.setState({ 
@@ -232,17 +232,17 @@ export default class DataBountyPlatform extends Component {
                 networkType, 
                 hotLoaderDisabled,
                 isMetaMask, 
-                data_bounty_platform: instanceDataBountyPlatform,
+                data_bounty_platform: instanceCrowdsourcingPortalForArt,
                 dai: instanceDai,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 DATA_BOUNTY_PLATFORM_ADDRESS : DATA_BOUNTY_PLATFORM_ADDRESS,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
-                  instanceDataBountyPlatform
+                  instanceCrowdsourcingPortalForArt
                 );
                 setInterval(() => {
-                  this.refreshValues(instanceDataBountyPlatform);
+                  this.refreshValues(instanceCrowdsourcingPortalForArt);
                 }, 5000);
               });
             }
